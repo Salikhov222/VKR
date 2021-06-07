@@ -1,0 +1,28 @@
+{% from "_render_field.html" import render_field %}
+{% extends "base.html" %}
+
+{% block title %}Восстановление пароля{% endblock title %}
+
+{%- block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <form action="{{ url_for('passRec') }}" method="POST">
+                    {{ form.csrf_token }}
+
+                    {{ render_field(form.login, placeholder='Логин')}}
+                    {{ render_field(form.passwordOld, placeholder='Пароль')}}
+                    {{ render_field(form.passwordNew, placeholder='Пароль')}}
+
+                    <div class="row justify-content-end form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Изменить пароль</button>
+                    </div>
+                </form>
+
+                {% if message %}
+                    <p class="text-danger">{{ message }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{%- endblock content %}

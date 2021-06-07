@@ -1,0 +1,57 @@
+{% from "_render_field.html" import render_field%}
+{% extends "base.html" %}
+
+{% block title %}Каталог исполнителей{% endblock title %}
+
+{%- block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ (url_for('perfCatAreas', username=username, status=status)) }}">К списку сфер деятельности</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ (url_for('perfCatList', username=username, status=status, areaURL=areaURL)) }}">К списку исполнителей</a>
+                    </li>
+                </ul>
+
+                <button type="button" class="btn btn-primary">
+                    {% if username == 'guest' %}
+                        <a href="{{ (url_for('index')) }}" class="text-white">На главную</a>
+                    {% else %}
+                        <a href="{{ (url_for('profile', username=username, status=status)) }}" class="text-white">Вернуться в личный кабинет</a>
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <h1>Каталог исполнителей</h1>
+        </div>
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong>Имя: </strong>{{ perfInfo[1] }}</p>
+                        <p><strong>Сфера деятельности: </strong>{{ perfInfo[2] }}</p>
+                        <p><strong>Описание услуг: </strong>{{ perfInfo[3] }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong>E-mail: </strong>{{ contacts[0] }}</p>
+                        <p><strong>Телефон: </strong>{{ contacts[1] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endblock content %}
+

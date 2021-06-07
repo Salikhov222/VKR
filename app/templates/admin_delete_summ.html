@@ -1,0 +1,29 @@
+{% from "_render_field.html" import render_field%}
+{% extends "base.html" %}
+
+{% block title %}Удаление резюме{% endblock title %}
+
+{%- block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <p>Удаление резюме, опубликованных раньше введенной даты</p>
+                <p>Введите дату в формате ГГГГ-ММ-ДД</p>
+
+                <form action="{{ url_for('adminDeleteSumm') }}" class="form-inline" method="POST">
+                    {{ form.csrf_token }}
+
+                    {{ render_field(form.date)}}
+
+                    <button type="submit" class="btn btn-primary">Удалить</button>
+                </form>
+
+                <a href="{{ url_for('admin') }}">Назад</a><br>
+
+                {% if message %}
+                    <p class="text-success">{{ message }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{%- endblock content %}

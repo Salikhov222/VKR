@@ -1,0 +1,41 @@
+{% from "_render_field.html" import render_field%}
+{% extends "base.html" %}
+
+{% block title %}Изменить должности{% endblock title %}
+
+{%- block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <form action="{{ url_for('adminDataProfEdit') }}" method="POST">
+                    {{ form.csrf_token }}
+
+                    {{ render_field(form.professionOld)}}
+                    {{ render_field(form.professionNew)}}
+
+                    <div class="row justify-content-end form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Изменить</button>
+                    </div>
+                </form>
+
+                {% if message %}
+                    <p class="text-danger">{{ message }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <a href="{{ url_for('admin') }}">Назад</a><br>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <ul class="list-group">
+                    {% for item2 in professions %}
+                        <li class="list-group-item">{{ item2 }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{%- endblock content %}

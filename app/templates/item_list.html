@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Мои записи{% endblock title %}
+
+{%- block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ (url_for('profile', status=status, username=username)) }}">
+                        {% if status == 'company' %}
+                            О компании
+                        {% elif status == 'employee' %}
+                            О соискателе
+                        {% elif status == 'customer' %}
+                            О заказчике
+                        {% elif status == 'performer' %}
+                            О исполнителе    
+                        {% endif %}
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ (url_for('createItem', status=status, username=username)) }}">
+                        {% if status == 'company' %}
+                            Добавить вакансию
+                        {% elif status == 'employee' %}
+                            Добавить резюме
+                        {% elif status == 'customer' %}
+                            Добавить задание
+                        {% endif %}
+                    </a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ (url_for('itemList', status=status, username=username)) }}">
+                        {% if status == 'company' %}
+                            Мои вакансии
+                        {% elif status == 'employee' %}
+                            Мои резюме
+                        {% elif status == 'customer' %}
+                            Мои задания
+                        {% endif %}
+                    <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    {% if status == 'company' %}
+                        <a class="nav-link" href="{{ (url_for('summCatInd', username=username, status=status)) }}">Каталог резюме</a>
+                    {% endif %}
+                    {% if status == 'employee' %}
+                        <a class="nav-link" href="{{ (url_for('vacCatInd', username=username, status=status)) }}">Каталог вакансий</a>
+                    {% endif %}
+                    {% if status == 'customer' %}
+                        <a class="nav-link" href="{{ (url_for('perfCatAreas', username=username, status=status)) }}">Каталог исполнителей</a>
+                    {% endif %}
+                    {% if status == 'performer' %}
+                        <a class="nav-link" href="{{ (url_for('taskCatAreas', username=username, status=status)) }}">Каталог заданий</a>
+                 {% endif %}
+                </li>
+            </ul>
+
+            <button type="button" class="btn btn-primary"><a href="{{ (url_for('logout')) }}" class="text-white">Выйти</a></button>
+        </div>
+    </div>
+</nav>
+
+    <div class="container">
+        <div class="row">
+                {% if status == 'company' %}
+                    {% for item in vacancyInfo %}
+                        <div class="col-lg-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p><strong>Отрасль: </strong>{{ item[1] }}</p>
+                                    <p><strong>Должность: </strong>{{ item[2] }}</p>
+                                    <p><strong>Описание: </strong>{{ item[3] }}</p>
+                                    <p><strong>Минимальная заработная плата: </strong>{{ item[4] }} руб.</p>
+                                    <p><strong>Максимальная заработная плата: </strong>{{ item[5] }} руб.</p>
+                                    <p><strong>Минимальный опыт работы (лет): </strong>{{ item[6] }}</p>
+                                    <p><strong>Условия: </strong>{{ item[7] }}</p>
+                                    <p><strong>Требования: </strong>{{ item[8] }}</p>
+                                    <p><strong>Обязанности: </strong>{{ item[9] }}</p>
+                                    <p><strong>Тип занятости: </strong>{{ item[10] }}</p>
+                                    <p><strong>Дата публикации: </strong>{{ item[11] }}</p>
+                                    <p><strong><a href="{{ url_for('ViewOtkliki', status=status, username=username, itemid=item[0]) }}" class="text-dark">Отклики: {{ item[12] }}</a></strong></p>
+                                    <form action="{{ url_for('editItem', status=status, username=username, itemid=item[0]) }}" method="GET">
+                                        <button type="submit" class="btn btn-primary">Редактировать</button>
+                                    </form>
+
+                                    <form action="{{ url_for('deleteItem', status=status, username=username, itemid=item[0]) }}" method="POST">
+                                        <button type="submit" class="btn btn-danger">Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if status == 'employee' %}
+                    {% for item in cvInfo %}
+                        <div class="col-lg-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p><strong>Отрасль: </strong>{{ item[1] }}</p>
+                                    <p><strong>Должность: </strong>{{ item[2] }}</p>
+                                    {% if item[3] %}
+                                        <p><strong>Заработная плата от: </strong>{{ item[3] }} руб.</p>
+                                    {% endif %}
+                                    {% if item[4] %}
+                                        <p><strong>Заработная плата до: </strong>{{ item[4] }} руб.</p>
+                                    {% endif %}
+                                    <p><strong>Опыт работы (лет): </strong>{{ item[5] }}</p>    
+                                    <p><strong>Уровень образования: </strong>{{ item[6] }}</p>
+                                    <p><strong>Учебное заведение: </strong>{{ item[7] }}</p>
+                                    <p><strong>Навыки: </strong>{{ item[8] }}</p>
+                                    <p><strong>Тип занятости: </strong>{{ item[9] }}</p>
+                                    <p><strong>Дата публикации: </strong>{{ item[10] }}</p>
+                                    <p><strong>Рейтинг: </strong>{{ item[11] }}</p>
+                                    <p><strong><a href="{{ url_for('prosmotri', status=status, username=username, itemid=item[0]) }}" class="text-dark">Просмотры: {{ item[12] }}</a></strong></p>
+
+                                    <form action="{{ url_for('editItem', status=status, username=username, itemid=item[0]) }}" method="GET">
+                                        <button type="submit" class="btn btn-primary">Редактировать</button>
+                                    </form>
+
+                                    <form action="{{ url_for('deleteItem', status=status, username=username, itemid=item[0]) }}" method="POST">
+                                        <button type="submit" class="btn btn-danger">Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if status == 'customer' %}
+                    {% for item in taskInfo %}
+                        <div class="col-lg-5">
+                            <div class="card"">
+                                <div class="card-body">
+                                    <p><strong>Сфера деятельности: </strong>{{ item[1] }}</p>
+                                    <p><strong>Описание задания: </strong>{{ item[2] }}</p>
+                                    <p><strong>Срок выполнения задания: </strong>{{ item[3] }}</p>
+                                    <p><strong>Стоимость выполнения: </strong>{{ item[4] }} руб.</p>
+                                    <p><strong><a href="{{ url_for('ViewRequest', status=status, username=username, itemid=item[0]) }}" class="text-dark">Заявки: {{ item[5] }}</a></strong></p>
+
+                                    <form action="{{ url_for('editItem', status=status, username=username, itemid=item[0]) }}" method="GET">
+                                        <button type="submit" class="btn btn-primary">Редактировать</button>
+                                    </form>
+
+                                    <form action="{{ url_for('deleteItem', status=status, username=username, itemid=item[0]) }}" method="POST">
+                                        <button type="submit" class="btn btn-danger">Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+        </div>
+    </div>
+{%- endblock content %}

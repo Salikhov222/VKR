@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Недостаточно средств{% endblock title %}
+
+{%- block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <button type="button" class="btn btn-primary">
+                    <a href="{{ (url_for('profile', username=username, status=status)) }}" class="text-white">Вернуться в личный кабинет</a>
+                </button>
+            </div>
+    </nav>
+    {% if message %}
+        <p align="center" class="text-danger">{{ message }}</p>
+    {% endif %}
+{%- endblock content %}

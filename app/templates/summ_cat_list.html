@@ -1,0 +1,89 @@
+{% from "_render_field.html" import render_field%}
+{% extends "base.html" %}
+
+{% block title %}Каталог резюме{% endblock title %}
+
+{%- block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ (url_for('summCatInd', status=status, username=username)) }}">К списку отраслей</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ (url_for('summCatPro', status=status, username=username, industryURL=industryURL )) }}">К списку должностей</a>
+                    </li>
+                </ul>
+
+                <button type="button" class="btn btn-primary">
+                    {% if username == 'guest' %}
+                        <a href="{{ (url_for('index')) }}" class="text-white">На главную</a>
+                    {% elif status == 'admin' %} 
+                        <a href="{{ url_for('admin') }}" class="text-white">Вернуться в личный кабинет</a>
+                    {% else %}
+                        <a href="{{ (url_for('profile', username=username, status=status)) }}" class="text-white">Вернуться в личный кабинет</a>
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            {% if username == 'admin' %}
+                <h1>Оценка резюме</h1>
+            {%else%}    
+                <h1>Каталог резюме</h1>
+            {%endif%}   
+        </div>
+        <div class="row">
+            {% for item in cvInfo %}
+                <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>Отрасль: </strong>{{ item[1] }}</p>
+                            <p><strong>Должность: </strong>{{ item[2] }}</p>
+
+                            {% if item[3] is not none %}
+                                <p><strong>Заработная плата от: </strong>{{ item[3] }}</p>
+                            {% endif %}
+
+                            {% if item[4] is not none %}
+                                <p><strong>Заработная плата до: </strong>{{ item[4] }}</p>
+                            {% endif %}
+
+                            <p><strong>Опыт работы (лет): </strong>{{ item[5] }}</p>
+                            <p><strong>Уровень образования: </strong>{{ item[6] }}</p>
+                            <p><strong>Учебное заведение: </strong>{{ item[7] }}</p>
+                            <p><strong>Навыки: </strong>{{ item[8] }}</p>
+                            <p><strong>Тип занятости: </strong>{{ item[9] }}</p>
+                            <p><strong>Дата публикации: </strong>{{ item[10] }}</p>
+                            {% if username == 'guest' %}
+                                <p><strong>Чтобы просмотреть контактные данные соискателя зарегистрируйтесь!</strong></p>
+                                <form action="{{url_for('registration')}}">
+                                    <button type="submit" class="btn btn-primary">Регистрация</button>
+                                </form>
+                            {% elif username == 'admin' %}
+                                    <form action="{{ url_for('summCatList', status=status, username=username, professionURL=item[2], industryURL=industryURL) }}" method="POST"> 
+                                        <div class="form-group">
+                                            {{ formRating.csrf_token }}
+                                            <em>{{ render_field(formRating.rating)}}</em>                               
+                                            <button type="submit" class="btn btn-primary btn-lg btn-block">Поставить оценку</button>                                   
+                                        </div>
+                                    </form> 
+                                    {% if message %}
+                                        <p class="text-success">{{ message }}</p>
+                                    {% endif %}    
+                            {% else %}
+                                <form action="{{ url_for('summCatItem', status=status, username=username, itemid=item[0], userid=userid, industryURL=industryURL, professionURL=professionURL) }}" method="POST">
+                                    <button type="submit" class="btn btn-primary">Смотреть далее</button>
+                                </form>
+                            {% endif %}      
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{%- endblock content %}

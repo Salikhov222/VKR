@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет{% endblock title %}
+
+{%- block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ (url_for('profile', status=status, username=username)) }}">
+                            {% if status == 'company' %}
+                                О компании
+                            {% elif status == 'employee' %}
+                                О соискателе
+                            {% elif status == 'customer' %}
+                                О заказчике
+                            {% elif status == 'performer' %}
+                                Об исполнителе 
+                            {% endif %}
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
+                    {% if not warning %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ (url_for('createItem', status=status, username=username)) }}">
+                                {% if status == 'company' %}
+                                    Добавить вакансию
+                                {% elif status == 'employee' %}
+                                    Добавить резюме
+                                {% elif status == 'customer' %}
+                                    Добавить задание    
+                                {% endif %}
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ (url_for('itemList', status=status, username=username)) }}">
+                                {% if status == 'company' %}
+                                    Мои вакансии
+                                {% elif status == 'employee'  %}
+                                    Мои резюме
+                                {% elif status == 'customer' %}
+                                    Мои задания
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        {% if status == 'company' %}
+                            <a class="nav-link" href="{{ (url_for('summCatInd', username=username, status=status)) }}">Каталог резюме</a>
+                        {% endif %}
+                        {% if status == 'employee' %}
+                            <a class="nav-link" href="{{ (url_for('vacCatInd', username=username, status=status)) }}">Каталог вакансий</a>
+                        {% endif %}
+                        {% if status == 'customer' %}
+                            <a class="nav-link" href="{{ (url_for('perfCatAreas', username=username, status=status)) }}">Каталог исполнителей</a>
+                        {% endif %}
+                        {% if status == 'performer' %}
+                            <a class="nav-link" href="{{ (url_for('taskCatAreas', username=username, status=status)) }}">Каталог заданий</a>
+                        {% endif %}
+                    </li>
+                </ul>
+
+                <button type="button" class="btn btn-primary"><a href="{{ (url_for('logout')) }}" class="text-white">Выйти</a></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3 align-self-center form-group">
+                {% if status == 'company' %}
+                    <p><strong>ИНН: </strong>{{ inn }}</p>
+                    <p><strong>Название фирмы: </strong>{{ companyName }}</p>
+                    <p><strong>Баланс фирмы: </strong>{{ companyBalance }} рублей <button type="button" class="btn btn-dark"><a href="{{(url_for('balance', status=status, username=username))}}" class="text-white">Пополнить</a></button></p>
+                    <p><strong>Имя работодателя: </strong>{{ companyEmployer_name }}</p>
+                    <p><strong>Фамилия работодателя: </strong>{{ companyEmployer_surname }}</p>
+                    <p><strong>Телефон фирмы: </strong>{{ companyPhone }}</p>
+                    <p><strong>E-mail фирмы: </strong>{{ companyEmail }}</p>
+                    <p><strong>Ваш пароль: </strong>••••••• <button type="button" class="btn btn-dark"><a href="{{(url_for('change_password'))}}" class="text-white">Изменить</a></button></p>               
+                {% endif %}
+
+                {% if status == 'employee' %}
+                    <p><strong>ФИО: </strong>{{ fullName }}</p>
+                    <p><strong>Ваш пол: </strong>{{ sex }}</p>
+                    <p><strong>Ваш возраст: </strong>{{ age }}</p>
+                    <p><strong>Телефон: </strong>{{ employeePhone }}</p>
+                    <p><strong>E-mail: </strong>{{ employeeEmail }}</p>
+                    <p><strong>Ваш пароль: </strong>••••••• <button type="button" class="btn btn-dark"><a href="{{(url_for('change_password'))}}" class="text-white">Изменить</a></button></p>
+                {% endif %}
+
+                {% if status == 'customer' %}
+                    <p><strong>Имя: </strong>{{ customerName }}</p>
+                    <p><strong>Баланс: </strong>{{ customerBalance }} рублей <button type="button" class="btn btn-dark"><a href="{{(url_for('balanceCust', status=status, username=username))}}" class="text-white">Пополнить</a></button></p>
+                    <p><strong>О себе: </strong>{{ customerAbout }}</p>
+                    <p><strong>Телефон: </strong>{{ customerPhone }}</p>
+                    <p><strong>e-mail: </strong>{{ customerEmail }}</p>
+                    <p><strong>Ваш пароль: </strong>••••••• <button type="button" class="btn btn-dark"><a href="{{(url_for('change_password'))}}" class="text-white">Изменить</a></button></p>
+                {% endif %}
+
+                {% if status == 'performer' %}
+                    <p><strong>Имя: </strong>{{ performerName }}</p>
+                    <p><strong>Сфера деятельности: </strong>{{ performerArea }}</p>
+                    <p><strong>О своей деятельности: </strong>{{ performerAbout }}</p>
+                    <p><strong>Телефон: </strong>{{ performerPhone }}</p>
+                    <p><strong>e-mail: </strong>{{ performerEmail }}</p>
+                    <p><strong>Ваш пароль: </strong>••••••• <button type="button" class="btn btn-dark"><a href="{{(url_for('change_password'))}}" class="text-white">Изменить</a></button></p>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary"><a href="{{ (url_for('profile_edit', status=status, username=username)) }}" class="text-white">Редактировать</a></button>
+
+                {% if warning %}
+                    {% if status == 'company' %}
+                        <p class="text-danger">Заполните информацию о компании полностью, чтобы размещать и просматривать свои вакансии</p>
+                    {% elif status == 'employee' %}
+                        <p class="text-danger">Введите свое ФИО, чтобы размещать и просматривать свои резюме</p>
+                    {% elif status == 'customer' %}
+                        <p class="text-danger">Введите свое имя, чтобы размещать и просматривать свои задания</p>
+                    {% elif status == 'performer' %}
+                        <p class="text-danger">Заполните информацию о себе полностью, чтобы иметь возможность получать предложения от заказчиков</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% if message %}
+            <p class="text-success">{{ message }}</p>
+        {% endif %}
+    </div>
+{%- endblock content %}

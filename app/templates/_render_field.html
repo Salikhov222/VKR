@@ -1,0 +1,22 @@
+{% macro render_field(field) %}
+    <div class="form-group">
+        <label for="{{ field.name }}">{{ field.label.text }}</label>
+        {{ field(class_='form-control', **kwargs)|safe }}
+        <ul class="list-group">
+            {% for error in field.errors %}
+                <li class="list-group-item text-danger">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro render_radio_field(field) %}
+    <div class="btn-group btn-group-toggle form-group" data-toggle="buttons">
+        {% for subfield in field %}
+            <label class="btn btn-secondary">
+                {{ subfield }}
+                {{ subfield.label.text }}
+            </label>
+        {% endfor %}
+    </div>
+{% endmacro %}

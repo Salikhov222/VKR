@@ -1,0 +1,36 @@
+{% from "_render_field.html" import render_field, render_radio_field %}
+{% extends "base.html" %}
+
+{% block title %}Регистрация{% endblock title %}
+
+{%- block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <form action="{{ url_for('registration') }}" method="POST">
+                    {{ form.csrf_token }}
+
+                    {{ render_field(form.login, placeholder=form.login.label.text)}}
+                    {{ render_field(form.password, placeholder=form.password.label.text)}}
+                    {{ render_field(form.password2, placeholder=form.password2.label.text)}}
+                    {{ render_field(form.email, placeholder=form.email.label.text)}}
+                    {{ render_field(form.phone, placeholder=form.phone.label.text)}}
+
+                    {{ render_radio_field(form.status) }}
+
+                    <div class="row justify-content-end">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Регистрация</button>
+                    </div>
+                </form>
+
+                {% if message %}
+                    <p class="text-danger">{{ message }}</p>
+                {% endif %}
+
+                <div class="row justify-content-center">
+                    <a href="{{ url_for('index') }}">На главную</a><br>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endblock content %}

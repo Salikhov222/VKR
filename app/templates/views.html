@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Пополнение баланса{% endblock title %}
+
+{%- block content %}
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <button type="button" class="btn btn-primary">
+                    <a href="{{ (url_for('profile', username=username, status=status)) }}" class="text-white">Вернуться в личный кабинет</a>
+                </button>
+            </div>
+    </nav>
+
+    <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Наименование фирмы</th>
+            <th scope="col">Дата просмотра</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for item in viewsInfo %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>    
+            </tr>
+            {%endfor%}
+        </tbody>
+{%- endblock content %}

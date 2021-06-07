@@ -1,0 +1,51 @@
+{% from "_render_field.html" import render_field%}
+{% extends "base.html" %}
+
+
+{% block title %}Добавить сферу деятельности{% endblock title %}
+
+{%- block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <form action="{{ url_for('adminDataAreasAdd') }}" method="POST">
+                    {{ form.csrf_token }}
+
+                    {{ render_field(form.area)}}
+
+                    <div class="row justify-content-end form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Добавить</button>
+                    </div>
+                </form>
+
+                {% if message %}
+                    <p class="text-danger">{{ message }}</p>
+                {% endif %}
+
+                <div class="row justify-content-center">
+                    <a href="{{ url_for('admin') }}">Назад</a><br>
+                </div>
+
+                <!-- <ul class="list-group">
+                    {% for item in areas %}
+                        <li class="list-group-item">{{ item }}</li>
+                    {% endfor %}
+                </ul> -->
+            </div>
+        </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Сфера деятельности</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in result %}
+                        <tr>
+                            <td>{{ item }}</td>
+                        </tr>
+                    {%endfor%}    
+                    </tbody>
+                </table>
+    </div>
+{%- endblock content %}

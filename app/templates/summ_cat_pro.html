@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Каталог резюме{% endblock title %}
+
+{%- block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ (url_for('summCatInd', status=status, username=username)) }}">К списку отраслей</a>
+                    </li>
+                </ul>
+
+                <button type="button" class="btn btn-primary">
+                    {% if username == 'guest' %}
+                        <a href="{{ (url_for('index')) }}" class="text-white">На главную</a>
+                    {% elif status == 'admin' %} 
+                        <a href="{{ url_for('admin') }}" class="text-white">Вернуться в личный кабинет</a>    
+                    {% else %}
+                        <a href="{{ (url_for('profile', username=username, status=status)) }}" class="text-white">Вернуться в личный кабинет</a>
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="row">
+            {% if username == 'admin' %}
+                <h1>Оценка резюме</h1>
+            {%else%}    
+                <h1>Каталог резюме</h1>
+            {%endif%}   
+        </div>
+        {% for item in data %}
+            <div class="row">
+                <div class="col-xs-3">
+                    <p><a href="{{ url_for('summCatList', status=status, username=username, professionURL=item[0], industryURL=industryURL) }}">{{ item[0] }}</a> -  {{ item[1] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{%- endblock content %}

@@ -1,0 +1,41 @@
+{% from "_render_field.html" import render_field%}
+{% extends "base.html" %}
+
+{% block title %}Изменить отрасли{% endblock title %}
+
+{%- block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <form action="{{ url_for('adminDataIndEdit') }}" method="POST">
+                    {{ form.csrf_token }}
+
+                    {{ render_field(form.industryOld)}}
+                    {{ render_field(form.industryNew)}}
+
+                    <div class="row justify-content-end form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Изменить</button>
+                    </div>
+                </form>
+
+                {% if message %}
+                    <p class="text-danger">{{ message }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <a href="{{ url_for('admin') }}">Назад</a><br>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <ul class="list-group">
+                    {% for item1 in industries %}
+                        <li class="list-group-item">{{ item1 }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{%- endblock content %}

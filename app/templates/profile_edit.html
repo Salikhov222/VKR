@@ -1,0 +1,124 @@
+{% from "_render_field.html" import render_field%}
+{% extends "base.html" %}
+
+{% block title %}Редактирование профиля{% endblock title %}
+
+{%- block content %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ (url_for('profile', status=status, username=username)) }}">
+                            {% if status == 'company' %}
+                                О компании
+                            {% elif status == 'employee' %}
+                                О соискателе
+                            {% elif status == 'customer' %}
+                                О заказчике
+                            {% elif status == 'performer' %}
+                                О исполнителе    
+                            {% endif %}
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
+                    {% if not warning %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ (url_for('createItem', status=status, username=username)) }}">
+                                {% if status == 'company' %}
+                                    Добавить вакансию
+                                {% elif status == 'employee' %}
+                                    Добавить резюме
+                                {% elif status == 'customer' %}
+                                    Добавить задание                                
+                                {% endif %}
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ (url_for('itemList', status=status, username=username)) }}">
+                                {% if status == 'company' %}
+                                    Мои вакансии
+                                {% elif status == 'employee' %}
+                                    Мои резюме
+                                {% elif status == 'customer' %}
+                                    Мои задания
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        {% if status == 'company' %}
+                           <a class="nav-link" href="{{ (url_for('summCatInd', username='guest', status='guest')) }}">Каталог резюме</a>
+                        {% endif %}
+                        {% if status == 'employee' %}
+                           <a class="nav-link" href="{{ (url_for('vacCatInd', username='guest', status='guest')) }}">Каталог вакансий</a>
+                        {% endif %}   
+                        {% if status == 'customer' %}
+                            <a class="nav-link" href="{{ (url_for('perfCatAreas', username=username, status=status)) }}">Каталог исполнителей</a>
+                        {% endif %}
+                        {% if status == 'performer' %}
+                            <a class="nav-link" href="{{ (url_for('taskCatAreas', username=username, status=status)) }}">Каталог заданий</a> 
+                        {% endif %}
+                    </li>
+                </ul>
+
+                <button type="button" class="btn btn-primary"><a href="{{ (url_for('logout')) }}" class="text-white">Выйти</a></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xs-3">
+                <form action="{{ url_for('profile_edit', status=status, username=username) }}" method="POST">
+                    {% if status == 'company' %}
+                        {{ formCompany.csrf_token }}
+                        {{ render_field(formCompany.inn)}}
+                        {{ render_field(formCompany.companyName)}}
+                        {{ render_field(formCompany.companyEmployer_name)}}
+                        {{ render_field(formCompany.companyEmployer_surname)}}
+                        {{ render_field(formCompany.companyEmail)}}
+                        {{ render_field(formCompany.companyPhone)}}
+                    {% endif %}
+
+                    {% if status == 'employee' %}
+                        {{ formEmployee.csrf_token }}
+                        {{ render_field(formEmployee.fullName)}}
+                        {{ render_field(formEmployee.sex)}}
+                        {{ render_field(formEmployee.age)}}
+                        {{ render_field(formEmployee.employeeEmail)}}
+                        {{ render_field(formEmployee.employeePhone)}}
+                    {% endif %}
+
+                    {% if status == 'customer' %}
+                        {{ formCustomer.csrf_token }}
+                        {{ render_field(formCustomer.customerName)}}
+                        {{ render_field(formCustomer.customerEmail)}}
+                        {{ render_field(formCustomer.customerPhone)}}
+                        {{ render_field(formCustomer.customerAbout)}}
+                    {% endif %}
+
+                    {% if status == 'performer' %}
+                        {{ formPerformer.hidden_tag() }}
+                        {{ render_field(formPerformer.performerName) }}
+                        {{ render_field(formPerformer.performerArea) }}
+                        {{ render_field(formPerformer.performerAbout) }}
+                        {{ render_field(formPerformer.performerEmail) }}
+                        {{ render_field(formPerformer.performerPhone) }}
+                    {% endif %}
+
+                    <div class="row justify-content-end form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Сохранить</button>
+                    </div>
+                </form>
+
+                {% if message %}
+                    <p class="text-danger">{{ message }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{%- endblock content %}
